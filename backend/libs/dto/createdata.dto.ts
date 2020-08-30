@@ -25,5 +25,7 @@ export class createDataDto {
   issueManager: string
   @ApiProperty({ description:'责任部门'})
   issueDepartment: string
+  @ApiProperty({ description:'问题处理详情'})
+  issueDetail: any
 }
 

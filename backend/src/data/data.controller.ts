@@ -97,51 +97,51 @@ export class DataController {
     await this.DataModel.findByIdAndDelete(id)
   }
 
-  @Post('/upload')
-  @ApiOperation({ summary: '上传CVS文档接口' })
-  @UseInterceptors(FileInterceptor('file'))
-  async upload(@UploadedFile('file') file) {
-    const result = file.buffer
-    const obj = xlsx.parse(result)    //解析完成excel
+  // @Post('/upload')
+  // @ApiOperation({ summary: '上传CVS文档接口' })
+  // @UseInterceptors(FileInterceptor('file'))
+  // async upload(@UploadedFile('file') file) {
+  //   const result = file.buffer
+  //   const obj = xlsx.parse(result)    //解析完成excel
 
-    const excelObj = obj[0].data    //这是第一个sheet的数据
+  //   const excelObj = obj[0].data    //这是第一个sheet的数据
 
-    const toMongo = {
-      'projectName': '',
-      'productName': '',
-      'issueBrief': '',
-      'issuePriority': '',
-      'issueStatus': '',
-      'issueType': '',
-      'issueCreateTime': '',
-      'issuePlanTime': '',
-      'issueCloseTime': '',
-      'issueSlution': '',
-      'issueManager': '',
-      'issueDepartment': '',
-    }
+  //   const toMongo = {
+  //     'projectName': '',
+  //     'productName': '',
+  //     'issueBrief': '',
+  //     'issuePriority': '',
+  //     'issueStatus': '',
+  //     'issueType': '',
+  //     'issueCreateTime': '',
+  //     'issuePlanTime': '',
+  //     'issueCloseTime': '',
+  //     'issueSlution': '',
+  //     'issueManager': '',
+  //     'issueDepartment': '',
+  //   }
 
-    for (var j = 1; j <= obj.length; j++) {
-      const excelObj = obj[j - 1].data      //[]中的数据需要通过加减操作，来表示它是数字
-      for (var i = 3; i <= excelObj.length; i++) {
-        const list = excelObj[i - 1]   //这是第二行数据
-        toMongo['projectName'] = list[0]
-        toMongo['productName'] = list[1]
-        toMongo['issueBrief'] = list[2]
-        toMongo['issuePriority'] = list[3]
-        toMongo['issueStatus'] = list[4]
-        toMongo['issueType'] = list[5]
-        toMongo['issueCreateTime'] = list[6]
-        toMongo['issuePlanTime'] = list[7]
-        toMongo['issueCloseTime'] = list[8]
-        toMongo['issueSlution'] = list[9]
-        toMongo['issueManager'] = list[10]
-        toMongo['issueDepartment'] = list[11]
-        await this.DataModel.create(toMongo)
-      }
-    }
-    // return excelObj.length
-  }
+  //   for (var j = 1; j <= obj.length; j++) {
+  //     const excelObj = obj[j - 1].data      //[]中的数据需要通过加减操作，来表示它是数字
+  //     for (var i = 3; i <= excelObj.length; i++) {
+  //       const list = excelObj[i - 1]   //这是第二行数据
+  //       toMongo['projectName'] = list[0]
+  //       toMongo['productName'] = list[1]
+  //       toMongo['issueBrief'] = list[2]
+  //       toMongo['issuePriority'] = list[3]
+  //       toMongo['issueStatus'] = list[4]
+  //       toMongo['issueType'] = list[5]
+  //       toMongo['issueCreateTime'] = list[6]
+  //       toMongo['issuePlanTime'] = list[7]
+  //       toMongo['issueCloseTime'] = list[8]
+  //       toMongo['issueSlution'] = list[9]
+  //       toMongo['issueManager'] = list[10]
+  //       toMongo['issueDepartment'] = list[11]
+  //       await this.DataModel.create(toMongo)
+  //     }
+  //   }
+  //   // return excelObj.length
+  // }
 
 
 }

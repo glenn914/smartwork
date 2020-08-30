@@ -12,6 +12,7 @@
       @refresh-change="freshList"
       @selection-change="selectionChange"
       @search-change="searchChange"
+      @row-dblclick="handleRowDBLClick"
       :cell-style="cellStyle"
     >
       <template slot="menuLeft">
@@ -22,26 +23,27 @@
           <i class="el-icon-delete el-icon--right">删除选中</i>
         </el-button>
       </template>
-      <template slot="tip">
-        <!-- 业务上线使用/data/upload -->
-        <!-- action="http://localhost/data/upload" -->
-        <!-- action="/data/upload"-->
-        <el-upload
-          :show-file-list="false"
-          action="/data/upload"
-          accept="*.csv"
-          :on-success="onLoad"
-        >
-          <el-button size="small" type="text">
-            <i class="el-icon-upload el-icon--right">Excel上传</i>
-          </el-button>
-        </el-upload>
-      </template>
+      <!-- <template slot="tip"> -->
+      <!-- 业务上线使用/data/upload -->
+      <!-- action="http://localhost/data/upload" -->
+      <!-- action="/data/upload"-->
+      <el-upload :show-file-list="false" action="/data/upload" accept="*.csv" :on-success="onLoad">
+        <el-button size="small" type="text">
+          <i class="el-icon-upload el-icon--right">Excel上传</i>
+        </el-button>
+      </el-upload>
+      <!-- </template> -->
       <template slot="menuRight">
         <el-button icon="el-icon-s-data" circle size="small" @click="dialogVisible = true"></el-button>
-        <el-dialog title="Data Analysis" :visible.sync="dialogVisible" width="60%" top="20vh">
+        <el-dialog title="项目问题占比" :visible.sync="dialogVisible" width="60%" top="20vh">
           <ve-pie :data="chartData"></ve-pie>
         </el-dialog>
+        <el-dialog
+          title="问题处理详情"
+          :visible.sync="dialogVisible2"
+          width="60%"
+          top="20vh"
+        >{{dialogContent2}}</el-dialog>
       </template>
     </avue-crud>
   </div>
@@ -56,6 +58,8 @@ export default class issueList extends Vue {
   data = {};
 
   dialogVisible = false;
+  dialogVisible2 = false;
+  dialogContent2 = "";
   page: any = {
     total: 1,
     pageSize: 10, //初始展示多少条目
@@ -136,6 +140,7 @@ export default class issueList extends Vue {
       {
         prop: "issueBrief",
         label: "问题描述",
+        type: "textarea",
         width: "200",
       },
       {
@@ -190,7 +195,17 @@ export default class issueList extends Vue {
         valueFormat: "yyyy-MM-dd",
         sortable: true,
       },
-      { prop: "issueSlution", label: "解决方案", width: "190" },
+      {
+        prop: "issueDetail",
+        label: "处理过程",
+        type: 'textarea',
+        width: "190",
+      },
+      {
+        prop: "issueSlution",
+        label: "解决方案",
+        width: "190",
+      },
       { prop: "issueManager", label: "责任人" },
       {
         prop: "issueDepartment",
@@ -282,10 +297,6 @@ export default class issueList extends Vue {
     this.selected = val;
   }
 
-  async print(val) {
-    console.log(val);
-  }
-
   async deleteSelected() {
     try {
       await this.$confirm("是否确认删除？");
@@ -313,6 +324,12 @@ export default class issueList extends Vue {
     this.fetch();
     console.log(val);
     done();
+  }
+
+  handleRowDBLClick(row) {
+    this.dialogVisible2 = true;
+    this.dialogContent2 = row.issueDetail;
+    console.log(row);
   }
 
   cellStyle(row) {
