@@ -244,7 +244,7 @@ export default class issueList extends Vue {
   async update(row, index, done, loading) {
     const data = JSON.parse(JSON.stringify(row));
     delete data.$index;
-    delete data.$issueMotherClass;
+    delete data.$projectName;
     delete data.$productName;
     delete data.$issuePriority;
     delete data.$issueStatus;
